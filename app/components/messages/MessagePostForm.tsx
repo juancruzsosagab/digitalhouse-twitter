@@ -1,4 +1,5 @@
 'use client';
+import useMessages from '@/app/contexts/message.contexts';
 import messageApi from '@/app/services/messages/messages.service';
 import Image from 'next/image';
 import { use, useEffect } from 'react';
@@ -13,13 +14,14 @@ type FromData = {
 
 const MessagePostForm = ( {parentId}: MessagePostFormProps ) => {
   const { register, handleSubmit, resetField, setFocus } = useForm<FromData>();
+  const {postMessage} = useMessages();
 
   useEffect(() => {
     setFocus('message');
-  }, []);
+  }, [setFocus]);
 
   const onSubmit = async (data: FromData) => {
-    const response = await messageApi.postMessage(data.message, parentId);
+    await postMessage(data.message, parentId);
     resetField('message');
     setFocus('message');
   };

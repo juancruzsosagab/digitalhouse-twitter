@@ -1,21 +1,21 @@
 import { MessageType } from '@/app/types/message.types';
 import { PageType } from '@/app/types/pagination.types';
 import { UserType } from '@/app/types/user.types';
-import { httpGetPublic } from '../common/http.service';
+import httpInternalApi from '../common/http.internal.service';
 
 class UserApi {
   getUserData = async (username: string): Promise<UserType> => {
-    return httpGetPublic(`/users/${username}`);
+    return httpInternalApi.httpGetPublic(`/users/${username}`);
   };
 
   getUserMessages = async (
     username: string
   ): Promise<PageType<MessageType>> => {
-    return httpGetPublic(`/users/${username}/messages`);
+    return httpInternalApi.httpGetPublic(`/users/${username}/messages`);
   };
 
   getUserReplies = async (username: string): Promise<PageType<MessageType>> => {
-    return httpGetPublic(`/users/${username}/messages/replies`);
+    return httpInternalApi.httpGetPublic(`/users/${username}/messages/replies`);
   };
 }
 

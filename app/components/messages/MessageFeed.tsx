@@ -1,49 +1,18 @@
 'use client';
 
 import InfiniteScroll from 'react-infinite-scroll-component';
-import { PageType } from '@/app/types/pagination.types';
-import { MessageType } from '@/app/types/message.types';
-import { use, useEffect, useState } from 'react';
 import Message from './Message';
-import messageApi from '@/app/services/messages/messages.service';
+import useMessages from '@/app/contexts/message.contexts';
 
-type MessageFeedProps = {
-  initialMessages: PageType<MessageType>;
-};
-
-const MessageFeed = ({ initialMessages }: MessageFeedProps) => {
-  const [messageResponse, setMessageResponse] =
-    useState<PageType<MessageType>>(initialMessages);
-  const [messages, setMessages] = useState<MessageType[]>(
-    initialMessages.content
-  );
-
-  useEffect(() => {
-    setMessageResponse(initialMessages);
-    setMessages(initialMessages.content);
-  }, [initialMessages]);
-
-  const fetchData = async () => {
-    const response = await messageApi.getMessageFeed(
-      messageResponse.pagination.page + 1,
-      10
-    );
-    setMessageResponse(response);
-    setMessages([...messages, ...response.content]);
-  };
-
-  const refresh = async () => {
-    const response = await messageApi.getMessageFeed(0, 10);
-    setMessageResponse(response);
-    setMessages(response.content);
-  };
+const MessageFeed = () => {
+const { messages, messagePage, fetchNextPage, refresh} = useMessages();
 
   return (
     <>
       <InfiniteScroll
         dataLength={messages.length}
-        next={fetchData}
-        hasMore={!messageResponse.pagination.last}
+        next={fetchNextPage}
+        hasMore={!messagePage.pagination.last}
         loader={<h4>Cargando más mensajes...</h4>}
         endMessage={
           <p style={{ textAlign: 'center' }}>

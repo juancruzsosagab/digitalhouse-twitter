@@ -1,13 +1,13 @@
 import { MessageType } from '@/app/types/message.types';
 import { PageType } from '@/app/types/pagination.types';
-import { httPost, httpGetPublic } from '../common/http.service';
+import httpInternalApi from '../common/http.internal.service';
 
 class MessageApi {
   getMessageFeed = async (
     page: number,
     size: number
   ): Promise<PageType<MessageType>> => {
-    return httpGetPublic(
+    return httpInternalApi.httpGetPublic(
       `/messages/feed`,
       new URLSearchParams({ page: `${page}`, size: `${size}` })
     );
@@ -18,7 +18,7 @@ class MessageApi {
     page: number,
     size: number
   ): Promise<MessageType> => {
-    return httpGetPublic(
+    return httpInternalApi.httpGetPublic(
       `/messages/${id}`,
       new URLSearchParams({ page: `${page}`, size: `${size}` })
     );
@@ -29,7 +29,7 @@ class MessageApi {
     page: number,
     size: number
   ): Promise<PageType<MessageType>> => {
-    return httpGetPublic(
+    return httpInternalApi.httpGetPublic(
       `/messages/${id}/replies`,
       new URLSearchParams({ page: `${page}`, size: `${size}` })
     );
@@ -39,7 +39,7 @@ class MessageApi {
     message: string,
     parentId?: string
   ): Promise<MessageType> => {
-    return httPost(`/messages`, {
+    return httpInternalApi.httpPost(`/messages`, {
       message: message,
       parentId: parentId ?? null,
     });
@@ -50,7 +50,7 @@ class MessageApi {
     page: number,
     size: number
   ): Promise<PageType<MessageType>> => {
-    return httpGetPublic(
+    return httpInternalApi.httpGetPublic(
       `/messages/hash/${hashtag}`,
       new URLSearchParams({ page: `${page}`, size: `${size}` })
     );
